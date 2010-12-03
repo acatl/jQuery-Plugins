@@ -34,10 +34,25 @@
       return "<" + name + attrs + ">" + content + "</" + name + ">";
     },
 
-    checkPlain : function (text) {
-      return text.replace(/["&]/g, function (match) {
+    checkPlain: function(text){
+      var self = this;
+      if ($.isPlainObject(text)) {
+        return self.extractObject(text);
+      }
+      
+      return text.replace(/["&]/g, function(match){
         return match === '"' ? '&quot;' : '&amp;';
       });
+    },
+    
+    extractObject: function(data){
+      var output = "";
+      if (!$.isEmptyObject(data)) {
+        $.each(data, function(k, v){
+          output+=k + ":" + v + ";";
+        });
+      }
+      return output;
     }
   };
 
